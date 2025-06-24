@@ -1,0 +1,36 @@
+# Игнорируем файлы и папки, связанные с Git
+.git
+.gitignore
+
+# Игнорируем файлы IDE и локальные настройки
+.idea/
+.vscode/
+
+# Игнорируем виртуальные окружения Python
+.venv
+venv/
+env/
+ENV/
+
+# Игнорируем скомпилированные файлы Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Игнорируем локальные файлы конфигурации и секреты
+# Они будут передаваться в контейнер отдельно на проде
+.env
+env.example
+credentials.json
+
+# Игнорируем локально сгенерированные файлы
+logs/
+downloaded_files/
+vector_storage/
+*.log
+*.faiss
+*.json
+
+# Файлы Docker
+Dockerfile
+.dockerignore 
