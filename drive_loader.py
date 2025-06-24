@@ -37,6 +37,7 @@ class DriveLoader:
            и "поделитесь" ею (дайте права "Читатель" или "Редактор")
            с email-адресом вашего сервисного аккаунта (он выглядит как ...@...iam.gserviceaccount.com).
         """
+        
         credentials_file = config.env.CREDENTIALS_FILE_PATH
         if not Path(credentials_file).exists():
             error_msg = (
@@ -46,10 +47,15 @@ class DriveLoader:
             logger.critical(error_msg)
             raise FileNotFoundError(error_msg)
 
-        gauth = GoogleAuth()
-        scope = ["https://www.googleapis.com/auth/drive"]
-        gauth.auth_method = 'service'
-        gauth.credentials_file = credentials_file
+        # Собираем настройки для PyDrive2 в памяти, чтобы избежать проблем с форматом файла
+        settings = {
+            "client_config_backend": "service",
+            "service_config": {
+                "client_json_file_path": credentials_file,
+            }
+        }
+        
+        gauth = GoogleAuth(settings=settings)
         
         try:
             gauth.ServiceAuth()
