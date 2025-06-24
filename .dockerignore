@@ -29,7 +29,7 @@ downloaded_files/
 vector_storage/
 *.log
 *.faiss
-*.json
+metadata.json
 
 # Файлы Docker
 Dockerfile

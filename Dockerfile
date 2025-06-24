@@ -17,8 +17,5 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # .gitignore и .dockerignore (который мы создадим) будут учитываться.
 COPY . .
 
-# Команда для отладки: посмотрим, какие файлы скопировались
-RUN ls -la /app
-
 # Указываем команду для запуска приложения при старте контейнера.
 CMD ["python", "telegram_bot.py"] 
