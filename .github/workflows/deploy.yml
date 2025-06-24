@@ -8,8 +8,8 @@ on:
 
 # Переменные окружения, доступные во всех задачах
 env:
-  # Имя репозитория для имени Docker-образа
-  IMAGE_NAME: ${{ github.repository }}
+  # Имя репозитория для имени Docker-образа (в нижнем регистре)
+  IMAGE_NAME: darkadich/rag-telegram-drive
 
 jobs:
   ########################################
@@ -63,7 +63,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22 # Порт SSH по умолчанию
+          script_stop: true # Остановить выполнение при ошибке
           script: |
             # Переходим в домашнюю директорию
             cd ~
