@@ -1,0 +1,14 @@
+{
+  "rag": {
+    "chunk_size": 700,
+    "chunk_overlap": 100,
+    "top_k": 5
+  },
+  "openai": {
+    "embedding_model": "text-embedding-ada-002",
+    "generation_model": "gpt-4-1106-preview"
+  },
+  "drive_loader": {
+    "download_path": "./downloaded_files"
+  }
+}
