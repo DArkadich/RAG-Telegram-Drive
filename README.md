@@ -11,3 +11,4 @@ Telegram бот с RAG (Retrieval Augmented Generation) системой, кот
 
 ## Статус деплоя
 ![Deploy Status](https://github.com/DArkadich/RAG-Telegram-Drive/actions/workflows/deploy.yml/badge.svg)
+
