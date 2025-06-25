@@ -82,8 +82,8 @@ jobs:
                 docker rm rag-bot
             fi
 
+
             # Создаем файл .env из секрета
-            # Важно: `>` перезапишет файл, что нам и нужно при каждом деплое
             echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
 
             # Создаем файл credentials.json из секрета
