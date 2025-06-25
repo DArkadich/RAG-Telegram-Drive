@@ -3,6 +3,7 @@ python-dotenv==1.0.1
 loguru==0.7.2
 pydantic==2.8.2
 pydantic-settings==2.10.1
+numpy<2.0
 
 # Асинхронный фреймворк для Telegram
 aiogram==3.10.0
