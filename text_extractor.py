@@ -75,8 +75,8 @@ class TextExtractor:
                 with fitz.open(file_path) as doc:
                     for i, page in enumerate(doc):
                         logger.debug(f"Обработка страницы {i+1}/{len(doc)} через OCR...")
-                        # Увеличиваем разрешение для лучшего качества распознавания
-                        pix = page.get_pixmap(dpi=300)
+                        # Уменьшаем разрешение до 200 DPI для снижения потребления памяти
+                        pix = page.get_pixmap(dpi=200)
                         img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
                         # Распознаем текст, указывая русский язык
                         ocr_text += pytesseract.image_to_string(img, lang='rus') + "\n"
