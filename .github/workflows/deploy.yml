@@ -82,7 +82,7 @@ jobs:
                 docker rm rag-bot
             fi
 
-
+ 
             # Создаем файл .env из секрета
             echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
 
