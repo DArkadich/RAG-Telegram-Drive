@@ -82,14 +82,11 @@ jobs:
                 docker rm rag-bot
             fi
 
- 
             # Создаем файл .env из секрета
             echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
 
-            # Создаем файл credentials.json из секрета
-            cat <<EOF > credentials.json
-${{ secrets.GDRIVE_CREDENTIALS }}
-EOF
+            # Создаем файл credentials.json из секрета (секрет должен быть в base64!)
+            echo "${{ secrets.GDRIVE_CREDENTIALS }}" | base64 -d > credentials.json
 
             # Создаем директории для монтирования, если их нет
             mkdir -p ./vector_storage
