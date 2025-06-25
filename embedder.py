@@ -10,7 +10,8 @@ class OpenAIEmbedder:
     def __init__(self, api_key: str = config.env.OPENAI_API_KEY, model: str = config.app.openai.embedding_model):
         if not api_key:
             raise ValueError("API-ключ OpenAI не найден. Проверьте .env файл.")
-        # openai.api_key = api_key  # Для старых версий < 1.0
+        
+        # Инициализация клиента OpenAI
         self.client = openai.OpenAI(api_key=api_key)
         self.model = model
         logger.info(f"Инициализирован OpenAIEmbedder с моделью: {self.model}")

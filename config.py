@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Union
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BaseModel
 from loguru import logger
@@ -40,7 +41,7 @@ class EnvSettings(BaseSettings):
 
 
 class Config:
-    def __init__(self, settings_path: str | Path = "settings.json"):
+    def __init__(self, settings_path: Union[str, Path] = "settings.json"):
         self.env = EnvSettings()
         
         try:

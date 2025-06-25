@@ -1,28 +1,92 @@
-# Core
-python-dotenv==1.0.1
-loguru==0.7.2
-pydantic==2.8.2
-pydantic-settings==2.3.4
-
-# Telegram Bot
+aiofiles==23.2.1
 aiogram==3.10.0
-
-# RAG Pipeline
-langchain==0.2.10
-langchain-community==0.2.7
-langchain-openai==0.1.17
-openai==1.36.1
-
-# Vector Store
+aiohttp==3.9.5
+aiosignal==1.3.2
+altgraph @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/altgraph-0.17.2-py2.py3-none-any.whl
+annotated-types==0.7.0
+anyio==4.9.0
+async-timeout==4.0.3
+attrs==25.3.0
+cachetools==5.5.2
+certifi==2025.6.15
+cffi==1.17.1
+charset-normalizer==3.4.2
+cryptography==41.0.7
+dataclasses-json==0.6.7
+distro==1.9.0
+exceptiongroup==1.3.0
 faiss-cpu==1.8.0
-
-# Document Loaders
-pypdf==4.3.1
-python-docx==1.1.2
-PyMuPDF==1.24.8
-
-# Google Drive
-PyDrive2==1.17.0
+frozenlist==1.7.0
+future @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/future-0.18.2-py3-none-any.whl
+google-api-core==2.25.1
 google-api-python-client==2.136.0
+google-auth==2.40.3
 google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.0
+googleapis-common-protos==1.70.0
+greenlet==3.2.3
+h11==0.16.0
+httpcore==1.0.9
+httplib2==0.22.0
+httpx==0.28.1
+httpx-sse==0.4.1
+idna==3.10
+jiter==0.10.0
+jsonpatch==1.33
+jsonpointer==3.0.0
+langchain==0.3.26
+langchain-community==0.3.26
+langchain-core==0.3.66
+langchain-openai==0.3.25
+langchain-text-splitters==0.3.8
+langsmith==0.4.1
+loguru==0.7.2
+lxml==5.4.0
+macholib @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/macholib-1.15.2-py2.py3-none-any.whl
+magic-filter==1.0.12
+marshmallow==3.26.1
+multidict==6.5.1
+mypy_extensions==1.1.0
+numpy==1.26.4
+oauth2client==4.1.3
+oauthlib==3.3.1
+openai==1.91.0
+orjson==3.10.18
+packaging==24.2
+propcache==0.3.2
+proto-plus==1.26.1
+protobuf==6.31.1
+pyasn1==0.6.1
+pyasn1_modules==0.4.2
+pycparser==2.22
+pydantic==2.8.2
+pydantic-settings==2.10.1
+pydantic_core==2.20.1
+PyDrive2==1.17.0
+PyMuPDF==1.24.8
+PyMuPDFb==1.24.8
+pyOpenSSL==23.3.0
+pyparsing==3.2.3
+pypdf==4.3.1
+python-docx==1.1.2
+python-dotenv==1.0.1
+python-telegram-bot==22.1
+PyYAML==6.0.2
+regex==2024.11.6
+requests==2.32.4
+requests-oauthlib==2.0.0
+requests-toolbelt==1.0.0
+rsa==4.9.1
+six @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/six-1.15.0-py2.py3-none-any.whl
+sniffio==1.3.1
+SQLAlchemy==2.0.41
+tenacity==8.5.0
+tiktoken==0.9.0
+tqdm==4.67.1
+typing-inspect==0.9.0
+typing-inspection==0.4.1
+typing_extensions==4.14.0
+uritemplate==4.2.0
+urllib3==2.4.0
+yarl==1.20.1
+zstandard==0.23.0

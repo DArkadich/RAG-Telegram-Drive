@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Union
 from pathlib import Path
 import fitz  # PyMuPDF
 import docx
@@ -13,12 +13,12 @@ class TextExtractor:
     def __init__(self):
         logger.info("Инициализирован TextExtractor.")
 
-    def extract_from_file(self, file_path: str | Path) -> Optional[Document]:
+    def extract_from_file(self, file_path: Union[str, Path]) -> Optional[Document]:
         """
         Извлекает текст из файла, определяя его тип по расширению.
 
         Args:
-            file_path (str | Path): Путь к файлу.
+            file_path (Union[str, Path]): Путь к файлу.
 
         Returns:
             Optional[Document]: Объект Document с текстом и метаданными 
