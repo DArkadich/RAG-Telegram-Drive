@@ -87,7 +87,9 @@ jobs:
             echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
 
             # Создаем файл credentials.json из секрета
-            echo "${{ secrets.GDRIVE_CREDENTIALS }}" > credentials.json
+           cat <<EOF > credentials.json
+${{ secrets.GDRIVE_CREDENTIALS }}
+EOF
 
             # Создаем директории для монтирования, если их нет
             mkdir -p ./vector_storage
