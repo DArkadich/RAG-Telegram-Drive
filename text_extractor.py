@@ -4,10 +4,13 @@ import fitz  # PyMuPDF
 import docx
 from loguru import logger
 from langchain.schema.document import Document
+from PIL import Image
+import pytesseract
 
 class TextExtractor:
     """
     Класс для извлечения текста из различных форматов файлов (PDF, DOCX).
+    Поддерживает OCR для PDF-файлов, не содержащих текстового слоя.
     """
 
     def __init__(self):
@@ -31,7 +34,7 @@ class TextExtractor:
 
         try:
             if extension == ".pdf":
-                text = self._extract_pdf(file_path)
+                text = self._extract_pdf_with_ocr(file_path)
             elif extension == ".docx":
                 text = self._extract_docx(file_path)
             else:
@@ -39,7 +42,7 @@ class TextExtractor:
                 return None
 
             if not text or text.isspace():
-                logger.warning(f"Документ '{file_path.name}' пуст или содержит только пробелы.")
+                logger.warning(f"Документ '{file_path.name}' пуст или содержит только пробелы. OCR также не дал результатов.")
                 return None
 
             metadata = {"source": file_path.name, "full_path": str(file_path)}
@@ -51,12 +54,43 @@ class TextExtractor:
             logger.error(f"Не удалось извлечь текст из файла {file_path.name}: {e}")
             return None
 
-    def _extract_pdf(self, file_path: Path) -> str:
-        """Извлекает текст из PDF-файла."""
+    def _extract_pdf_with_ocr(self, file_path: Path) -> str:
+        """
+        Извлекает текст из PDF. Если текстовый слой пуст, применяет OCR.
+        """
         text = ""
-        with fitz.open(file_path) as doc:
-            for page in doc:
-                text += page.get_text()
+        try:
+            with fitz.open(file_path) as doc:
+                for page in doc:
+                    text += page.get_text()
+        except Exception as e:
+            logger.error(f"Ошибка при первичном чтении PDF '{file_path.name}': {e}")
+            return "" # Возвращаем пустую строку, чтобы не падать
+
+        # Если после обычного извлечения текста нет, пробуем OCR
+        if not text.strip():
+            logger.info(f"Текстовый слой в '{file_path.name}' пуст. Запускаю OCR...")
+            try:
+                ocr_text = ""
+                with fitz.open(file_path) as doc:
+                    for i, page in enumerate(doc):
+                        logger.debug(f"Обработка страницы {i+1}/{len(doc)} через OCR...")
+                        # Увеличиваем разрешение для лучшего качества распознавания
+                        pix = page.get_pixmap(dpi=300)
+                        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                        # Распознаем текст, указывая русский язык
+                        ocr_text += pytesseract.image_to_string(img, lang='rus') + "\n"
+                
+                if ocr_text.strip():
+                    logger.success(f"OCR успешно завершен для '{file_path.name}'.")
+                    return ocr_text
+                else:
+                    logger.warning(f"OCR не смог распознать текст в '{file_path.name}'.")
+                    return "" # Возвращаем пустую строку, если OCR ничего не нашел
+            except Exception as e:
+                logger.error(f"Ошибка в процессе OCR для файла '{file_path.name}': {e}")
+                return "" # В случае ошибки OCR, возвращаем пустую строку
+
         return text
 
     def _extract_docx(self, file_path: Path) -> str:

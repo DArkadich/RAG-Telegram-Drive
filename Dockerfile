@@ -6,6 +6,15 @@ FROM python:3.10-slim-buster
 # Все последующие команды будут выполняться относительно этого пути.
 WORKDIR /app
 
+# Устанавливаем Tesseract OCR и языковой пакет для русского языка.
+# -y флаг автоматически отвечает "yes" на все запросы.
+# --no-install-recommends предотвращает установку ненужных пакетов.
+# В конце очищаем кэш apt, чтобы уменьшить размер образа.
+RUN apt-get update && \
+    apt-get install -y tesseract-ocr tesseract-ocr-rus --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Обновляем pip и устанавливаем зависимости.
 # Копируем только requirements.txt сначала, чтобы воспользоваться кэшированием слоев Docker.
 # Этот слой будет пересобираться только если requirements.txt изменится.
