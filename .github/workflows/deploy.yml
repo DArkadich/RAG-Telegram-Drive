@@ -87,7 +87,7 @@ jobs:
             echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
 
             # Создаем файл credentials.json из секрета
-           cat <<EOF > credentials.json
+            cat <<EOF > credentials.json
 ${{ secrets.GDRIVE_CREDENTIALS }}
 EOF
 
