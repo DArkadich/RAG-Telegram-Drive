@@ -36,52 +36,67 @@ class RagEngine:
 
     def sync_knowledge_base(self):
         """
-        Полный цикл обновления базы знаний:
-        1. Скачивает новые файлы с Google Drive.
-        2. Извлекает из них текст.
-        3. Разделяет текст на чанки.
-        4. Создает эмбеддинги для чанков.
-        5. Добавляет их в векторное хранилище.
+        Полный цикл обновления базы знаний с рекурсивным обходом папок.
         """
-        logger.info("--- Начало синхронизации базы знаний ---")
+        logger.info("--- Начало полной синхронизации базы знаний ---")
         
-        # 1. Скачивание
-        folder_id = config.env.GDRIVE_FOLDER_ID
-        new_files = self.drive_loader.download_new_files(folder_id)
-        if not new_files:
-            logger.info("Новых файлов для обработки нет. База знаний актуальна.")
+        folders_to_scan = [config.env.GDRIVE_FOLDER_ID]
+        processed_folders = set()
+        all_new_chunks = []
+
+        while folders_to_scan:
+            folder_id = folders_to_scan.pop(0)
+            if folder_id in processed_folders:
+                continue
+            
+            logger.info(f"Сканирование папки Google Drive: {folder_id}")
+            processed_folders.add(folder_id)
+
+            # 1. Скачивание
+            new_files = self.drive_loader.download_new_files(folder_id)
+            if not new_files:
+                logger.info(f"В папке {folder_id} новых файлов для обработки нет.")
+                continue
+
+            # 2. Извлечение текста и ссылок
+            extracted_docs = []
+            for file_path in new_files:
+                doc, new_links = self.text_extractor.extract_from_file(file_path)
+                if doc:
+                    extracted_docs.append(doc)
+                if new_links:
+                    for link_id in new_links:
+                        if link_id not in processed_folders and link_id not in folders_to_scan:
+                            folders_to_scan.append(link_id)
+            
+            if not extracted_docs:
+                logger.info("Не удалось извлечь текст из скачанных файлов в этой папке.")
+                continue
+
+            # 3. Разделение на чанки
+            chunks = self.text_splitter.split_documents(extracted_docs)
+            if chunks:
+                all_new_chunks.extend(chunks)
+
+        if not all_new_chunks:
+            logger.info("Нового контента для добавления в базу не найдено.")
+            logger.info("--- Синхронизация базы знаний завершена (без изменений) ---")
             return
 
-        # 2. Извлечение текста
-        extracted_docs = []
-        for file_path in new_files:
-            doc = self.text_extractor.extract_from_file(file_path)
-            if doc:
-                extracted_docs.append(doc)
-        
-        if not extracted_docs:
-            logger.info("Не удалось извлечь текст из скачанных файлов.")
-            return
-
-        # 3. Разделение на чанки
-        chunks = self.text_splitter.split_documents(extracted_docs)
-        if not chunks:
-            logger.warning("Не удалось создать чанки из документов.")
-            return
-
-        # 4. Создание эмбеддингов
-        texts_to_embed = [chunk.page_content for chunk in chunks]
+        # 4. Создание эмбеддингов для всех собранных чанков
+        logger.info(f"Создание эмбеддингов для {len(all_new_chunks)} новых чанков...")
+        texts_to_embed = [chunk.page_content for chunk in all_new_chunks]
         try:
             embeddings = self.embedder.get_embeddings(texts_to_embed)
             # Добавляем эмбеддинги в метаданные каждого чанка
-            for i, chunk in enumerate(chunks):
+            for i, chunk in enumerate(all_new_chunks):
                 chunk.metadata["embedding"] = embeddings[i]
         except Exception as e:
             logger.error(f"Не удалось создать эмбеддинги: {e}")
             return
             
         # 5. Добавление в векторное хранилище
-        self.vector_store.add(chunks)
+        self.vector_store.add(all_new_chunks)
         
         logger.info("--- Синхронизация базы знаний успешно завершена ---")
 
