@@ -11,7 +11,8 @@ WORKDIR /app
 # Этот слой будет пересобираться только если requirements.txt изменится.
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt && \
+    rm -rf /root/.cache/pip
 
 # Копируем все остальные файлы проекта в рабочую директорию.
 # .gitignore и .dockerignore (который мы создадим) будут учитываться.
